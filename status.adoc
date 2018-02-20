@@ -4,7 +4,7 @@ The DTrace Toolkit was originally written for Solaris.
 Some &mdash; but not all &mdash; of its scripts run on FreeBSD.
 
 
-[cols="1,8",options="header"]
+[cols="1,8a",options="header"]
 |===
 | Name | FreeBSD status
 
@@ -16,5 +16,20 @@ Adjust internal `PATH` (line 67) to include `/usr/local/bin`. +
 
 | `/dtruss`
 | Requires removal of `lstat(2)` system call (FreeBSD 11 compat only)
+
+| `/dvmstat`
+| FreeBSD does not have `vminfo` provider
+
+| `/errinfo`
+| Works out of the box
+
+| `/execsnoop`
+| Works out of the box
+
+| `/hotkernel`
+| Works out of the box
+
+| `/hotuser`
+| Works out of the box
 
 |===
