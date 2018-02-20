@@ -32,4 +32,12 @@ Adjust internal `PATH` (line 67) to include `/usr/local/bin`. +
 | `/hotuser`
 | Works out of the box
 
+| `/iopattern`
+| Runs (with no output?) after:
+
+ * adding `#include <sys/bio.h>`
+ * changing embedded DTrace script to a heredoc (to accommodate `#include`)
+ * renaming `io:genunix::done` to `io:kernel::done`
+ * renaming various `bio` fields (e.g., `b_bcount` to `bio_bcount`)
+
 |===

@@ -120,7 +120,8 @@ fi
 #################################
 # --- Main Program, DTrace ---
 #
-/usr/sbin/dtrace -n '
+filename=`mktemp -t dtrace.XXXXXXXX`
+cat > ${filename} << EOF
  /*
   * Command line arguments
   */
@@ -136,6 +137,8 @@ fi
  inline string MOUNT 	= "'$mount'";
  
  #pragma D option quiet
+
+#include <sys/bio.h>
 
  int last_loc[string];
 
@@ -180,38 +183,40 @@ fi
  /*
   * Check event is being traced
   */
- io:genunix::done
+ io:kernel::done
  { 
 	/* default is to trace unless filtering */
 	self->ok = FILTER ? 0 : 1;
 
 	/* check each filter */
-	(OPT_device == 1 && DEVICE == args[1]->dev_statname)? self->ok = 1 : 1;
+	(OPT_device == 1 && DEVICE == args[1]->device_name)? self->ok = 1 : 1;
+	/*
 	(OPT_file == 1 && FILENAME == args[2]->fi_pathname) ? self->ok = 1 : 1;
 	(OPT_mount == 1 && MOUNT == args[2]->fi_mount)  ? self->ok = 1 : 1;
+	*/
  }
 
  /*
   * Process and Print completion
   */
- io:genunix::done
+ io:kernel::done
  /self->ok/
  {
 	/*
 	 * Save details
 	 */
-	this->loc = args[0]->b_blkno * 512;
-	this->pre = last_loc[args[1]->dev_statname];
-	diskr += args[0]->b_flags & B_READ ? args[0]->b_bcount : 0;
-	diskw += args[0]->b_flags & B_READ ? 0 : args[0]->b_bcount;
+	this->loc = args[0]->bio_pblkno * 512;
+	this->pre = last_loc[args[1]->device_name];
+	diskr += args[0]->bio_flags & BIO_READ ? args[0]->bio_bcount : 0;
+	diskw += args[0]->bio_flags & BIO_READ ? 0 : args[0]->bio_bcount;
 	diskran += this->pre == this->loc ? 0 : 1;
 	diskcnt++;
-	diskmin = diskmin == 0 ? args[0]->b_bcount :
-	    (diskmin > args[0]->b_bcount ? args[0]->b_bcount : diskmin);
-	diskmax = diskmax < args[0]->b_bcount ? args[0]->b_bcount : diskmax;
+	diskmin = diskmin == 0 ? args[0]->bio_bcount :
+	    (diskmin > args[0]->bio_bcount ? args[0]->bio_bcount : diskmin);
+	diskmax = diskmax < args[0]->bio_bcount ? args[0]->bio_bcount : diskmax;
 
 	/* save disk location */
-	last_loc[args[1]->dev_statname] = this->loc + args[0]->b_bcount;
+	last_loc[args[1]->device_name] = this->loc + args[0]->bio_bcount;
 
 	/* cleanup */
 	self->ok = 0;
@@ -274,4 +279,7 @@ fi
  {
 	exit(0);
  }
-'
+EOF
+
+/usr/sbin/dtrace -Cs ${filename}
+rm ${filename}
