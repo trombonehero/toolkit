@@ -8,4 +8,10 @@ Some &mdash; but not all &mdash; of its scripts run on FreeBSD.
 |===
 | Name | FreeBSD status
 
+| `/dexplorer`
+|
+Run with `/usr/local/bin/ksh`, not `/usr/bin/ksh`. +
+Adjust internal `PATH` (line 67) to include `/usr/local/bin`. +
+**Fails to run** after the above: invalid probe specifiers ("no symbolic type information is available for zfs.ko`utsname").
+
 |===
