@@ -14,4 +14,7 @@ Run with `/usr/local/bin/ksh`, not `/usr/bin/ksh`. +
 Adjust internal `PATH` (line 67) to include `/usr/local/bin`. +
 **Fails to run** after the above: invalid probe specifiers ("no symbolic type information is available for zfs.ko`utsname").
 
+| `/dtruss`
+| Requires removal of `lstat(2)` system call (FreeBSD 11 compat only)
+
 |===

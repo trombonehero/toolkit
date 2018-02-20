@@ -270,7 +270,6 @@ syscall::sigprocmask:return
 /* print 3 args, arg0 as a string */
 syscall::access*:return,
 syscall::stat*:return, 
-syscall::lstat*:return, 
 syscall::readlink*:return,
 syscall::open*:return
 /self->start/
