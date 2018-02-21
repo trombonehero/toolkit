@@ -32,12 +32,20 @@ Adjust internal `PATH` (line 67) to include `/usr/local/bin`. +
 | `/hotuser`
 | Works out of the box
 
-| `/iopattern`
-| Runs (with no output?) after:
+| `/iopattern`, `/iosnoop`
+| These **run** after:
 
  * adding `#include <sys/bio.h>`
  * changing embedded DTrace script to a heredoc (to accommodate `#include`)
+ * changing `dev_statname` to `device_name`
+ * removing `args[2]` (not present in FreeBSD `io:kernel::done`)
  * renaming `io:genunix::done` to `io:kernel::done`
  * renaming various `bio` fields (e.g., `b_bcount` to `bio_bcount`)
+
+However, `/iosnoop` gives errors of the form:
+
+----
+dtrace: error on enabled probe ID 5 (ID 72577: io:kernel:none:done): invalid address (0x8) in predicate at DIF offset 16
+----
 
 |===
