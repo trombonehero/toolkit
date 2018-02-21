@@ -65,4 +65,7 @@ dtrace: error on enabled probe ID 5 (ID 72577: io:kernel:none:done): invalid add
 dtrace: error on enabled probe ID 70 (ID 74933: syscall:freebsd:read:return): invalid address (0x0) in action #8
 ----
 
+| `/rwtop`
+| FreeBSD does not have a `sysinfo` provider
+
 |===
