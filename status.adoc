@@ -68,4 +68,9 @@ dtrace: error on enabled probe ID 70 (ID 74933: syscall:freebsd:read:return): in
 | `/rwtop`
 | FreeBSD does not have a `sysinfo` provider
 
+| `/statsnoop`
+| Runs after modification: FreeBSD 12 has removed `stat(2)` and `lstat(2`)
+  (and never had `xstat(2)`), so much of the script's complexity can disappear.
+  We also had to modify the pointer walk used to find a file by FD.
+
 |===
