@@ -52,4 +52,17 @@ However, `/iosnoop` gives errors of the form:
 dtrace: error on enabled probe ID 5 (ID 72577: io:kernel:none:done): invalid address (0x8) in predicate at DIF offset 16
 ----
 
+| `/opensnoop`
+| Works out of the box
+
+| `/procsystime`
+| Works out of the box
+
+| `/rwsnoop`
+| Mostly works, but does throw similar predicate error to `/iosnoop`:
+
+----
+dtrace: error on enabled probe ID 70 (ID 74933: syscall:freebsd:read:return): invalid address (0x0) in action #8
+----
+
 |===
