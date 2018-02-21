@@ -35,6 +35,7 @@ Adjust internal `PATH` (line 67) to include `/usr/local/bin`. +
 | `/iopattern`, `/iosnoop`
 | These **run** after:
 
+ * changing `/usr/bin/sh` to `/bin/sh`
  * adding `#include <sys/bio.h>`
  * changing embedded DTrace script to a heredoc (to accommodate `#include`)
  * changing `dev_statname` to `device_name`
